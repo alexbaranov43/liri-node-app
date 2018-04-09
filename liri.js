@@ -13,55 +13,42 @@ var search = process.argv[3];
 
 if (command === "spotify-this-song") {
     var client = new spotify(keys.spotify);
-    var artists = [];
-
     if (search) {
-        spotify
-        client.search({ type: 'track', query: search, limit: 1 }, function (err, data) {
+        client.search({ type: 'track', query: search, limit: 5 }, function (err, data) {
             if (err) {
                 return console.log('Error occurred: ' + err);
             }
-            // function artist() {
-            // for (i = 0; i < data.tracks.items.length; i++) {
-            // for (i = 0; i < data.tracks.items[i].album.artists.length; i++) {
-            // artists.push(data.tracks.items[i].album.artists[i].name)
-            // console.log("Artist[s]: " + artists.join(", "));
-            // }
-            // }
-            // }
             for (i = 0; i < data.tracks.items.length; i++) {
-
-                for (i = 0; i < data.tracks.items[i].album.artists.length; i++) {
-                    artists.push(data.tracks.items[i].album.artists[i].name)
+                var artists = [];
+                console.log("*-------------------------------------*")
+                for (i2 = 0; i2 < data.tracks.items[i].artists.length; i2++) {
+                    artists.push(data.tracks.items[i].artists[i2].name)
                 }
-
-                console.log("Song Name: " + data.tracks.items[i].name)
-                console.log("Artist[s]: " + artists.join((", ")))
-
+                console.log("Artists: " + artists.join(", "))
+                console.log("Title: " + data.tracks.items[i].name)
+                console.log("Album: " + data.tracks.items[i].album.name)
+                console.log("Preview Link: " + data.tracks.items[i].preview_url)
             }
         })
+    }
+    else {
+        {
+            client.search({ type: 'track', query: "The Sign Ace of Base ", limit: 1 }, function (err, data) {
+                if (err) {
+                    return console.log('Error occurred: ' + err);
+                }
+                for (i = 0; i < 5; i++) {
+                    console.log("*-------------------------------------*")
+                    console.log("Artists: " + data.tracks.items[i].artists[0].name)
+                    console.log("Title: " + data.tracks.items[i].name)
+                    console.log("Album: " + data.tracks.items[i].album.name)
+                    console.log("Preview Link: " + data.tracks.items[i].preview_url)
+                }
+            })
+        }
 
-
-
-        // for (i = 0; i < data.tracks.items.length; i++) {
-        // function artist() {
-        // for (i = 0; i < data.tracks.items.length; i++) { 
-        // for (i = 0; i < data.tracks.items[i].album.artists.length; i++) {
-        // artists.push(data.tracks.items[i].album.artists[i].name)
-        // console.log("Artist[s]: " + artists.join(", "));
-        // }}
-        // }
-        // console.log("Song Name: " + data.tracks.items[i].name)
-        // artist();
-        // console.log(data.tracks.items[i].album)
-
-
-
-        // }
-        // });
     }
 }
-
 else if (command === "movie-this") {
     if (search) {
         request("http://www.omdbapi.com/?t=" + search + "&y=&plot=short&apikey=trilogy", function (error, response, body) {
