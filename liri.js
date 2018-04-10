@@ -15,7 +15,7 @@ if (command === "spotify-this-song") {
     spotifySong(search);
 }
 else if (command === "movie-this") {
-    movieSearch()
+    movieSearch(search)
 }
 else if (command === "do-what-it-says") {
     doWhatItSays()
@@ -23,6 +23,7 @@ else if (command === "do-what-it-says") {
 }
 else if (command === "my-tweets") {
     twitterTweets();
+
 }
 
 
@@ -48,6 +49,12 @@ function spotifySong(search) {
                 console.log("Title: " + data.tracks.items[i].name)
                 console.log("Album: " + data.tracks.items[i].album.name)
                 console.log("Preview Link: " + data.tracks.items[i].preview_url)
+                logData('\n*-------------------------------------*' +
+                    '\r\nArtists: ' + artists.join(", ")
+                    +'\r\nTitle: ' + data.tracks.items[i].name
+                    +'\r\nAlbum: ' + data.tracks.items[i].album.name
+                    +'\r\nPreview Link: ' + data.tracks.items[i].preview_url
+                )
             }
         })
     }
@@ -70,6 +77,15 @@ function movieSearch(search) {
                 console.log("Languge[s] :" + JSON.parse(body).Language);
                 console.log("Plot: " + JSON.parse(body).Plot);
                 console.log("Actors: " + JSON.parse(body).Actors)
+                logData('\n*-------------------------*' + '\r\n' + JSON.parse(body).Title
+                    + '\r\nRelease Year: ' + JSON.parse(body).Year
+                    + '\r\nIMDb Rating: ' + JSON.parse(body).imdbRating
+                    + "\r\nRotten Tomatoes Rating: " + JSON.parse(body).Ratings[1].Value
+                    + "\r\nProduced In: " + JSON.parse(body).Country
+                    + "\r\nLanguge[s] :" + JSON.parse(body).Language
+                    + "\r\nPlot: " + JSON.parse(body).Plot
+                    + "\r\nActors: " + JSON.parse(body).Actors
+                )
             }
         });
     } else {
@@ -91,6 +107,7 @@ function twitterTweets() {
                 console.log("*---------------------*")
                 console.log(tweets[i].created_at)
                 console.log(tweets[i].text);
+                logData("\n*---------------------*" + '\r\n' + tweets[i].created_at + "\r\n" + tweets[i].text)
             }
         }
     });
@@ -109,4 +126,11 @@ function doWhatItSays() {
             }
         }
     })
+}
+
+function logData(dataLog) {
+    fs.appendFile("./log.txt", dataLog, function (err) {
+        if (err) throw err;
+    })
+
 }
